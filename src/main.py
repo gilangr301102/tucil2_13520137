@@ -75,12 +75,13 @@ class CurveBezierSol():
         # print("------------")
 
         self.bezier_generated_points[curr_iteration].append(p2)
-        if(curr_iteration==self.iteration):
-            self.bezier_curve_points.append(midpoint3)
 
         curr_iteration += 1
 
         self.generate_bezier_points_dnc(p1,midpoint1,midpoint3,curr_iteration)
+
+        if(curr_iteration<=self.iteration):
+            self.bezier_curve_points.append(midpoint3)
 
         self.generate_bezier_points_dnc(midpoint3,midpoint2,p3,curr_iteration)
 
@@ -94,33 +95,34 @@ class CurveBezierSol():
             self.bezier_curve_points.append(self.initial_points[i+2])
 
     def getSolution(self):
-        # print(self.bezier_generated_points)
-        # print(self.bezier_curve_points)
-        visualize_points_x = [[],[]]
-        visualize_points_y = [[],[]]
+        sz_generated_points = len(self.bezier_generated_points)
+        visualize_points_x = [[] for i in range(sz_generated_points+1)]
+        visualize_points_y = [[] for i in range(sz_generated_points+1)]
+        print(len(self.bezier_curve_points))
+        print(self.bezier_curve_points)
 
-        for i in range(len(self.bezier_generated_points[0])):
-            visualize_points_x[0].append(self.bezier_generated_points[0][i].x)
-            visualize_points_y[0].append(self.bezier_generated_points[0][i].y)
-        
+        for i in range(sz_generated_points):
+            for j in range(len(self.bezier_generated_points[i])):
+                visualize_points_x[i].append(self.bezier_generated_points[i][j].x)
+                visualize_points_y[i].append(self.bezier_generated_points[i][j].y)
+
         for i in range(len(self.bezier_curve_points)):
-            visualize_points_x[1].append(self.bezier_curve_points[i].x)
-            visualize_points_y[1].append(self.bezier_curve_points[i].y)
+            visualize_points_x[sz_generated_points].append(self.bezier_curve_points[i].x)
+            visualize_points_y[sz_generated_points].append(self.bezier_curve_points[i].y)
 
         # Initialize the plot
         fig, ax = plt.subplots()
 
-        for i in range(2):
-            # print("debug coordinates")
-            # print(coordinates)
+        for i in range(sz_generated_points+1):
             line, = ax.plot(visualize_points_x[i], visualize_points_y[i])
             points, = ax.plot(visualize_points_x[i], visualize_points_y[i], 'o')
 
             # Randomize line and point colors
-            line_color = "#{:06x}".format(random.randint(0, 0xFFFFFF), label="Line")
+            line_color = (i==sz_generated_points and "red" or "black")
             point_color = "#{:06x}".format(random.randint(0, 0xFFFFFF), label="Point")
 
             # Set line and point colors
+            line.set_color(line_color)
             points.set_color(point_color)
             for j in range(len(visualize_points_x[i])):
                 line.set_data(visualize_points_x[i][:j+1], visualize_points_y[i][:j+1])
