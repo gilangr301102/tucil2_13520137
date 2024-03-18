@@ -10,6 +10,7 @@ class Point:
 
 class CurveBezierSol():
     def __init__(self):
+        # Initialize the input values
         command = self.inputCommandHandling()
         self.initial_points = []
         if(command=="2"):
@@ -32,6 +33,7 @@ class CurveBezierSol():
         self.bezier_curve_points = []
 
     def inputCommandHandling(self):
+        # Get the input command from the user
         print("Input Options: ")
         print("1. Manual input")
         print("2. File input")
@@ -45,11 +47,13 @@ class CurveBezierSol():
         return command
 
     def fileInputHandling(self):
+        # Read the file input
         with open('../test/input.txt', 'r') as file:
             file_content = file.read().strip().split('\n')
         return file_content
 
     def manualInputHandling(self):
+        # Get the input from the user
         self.n = int(input("Masukkan n: "))
         self.iteration = int(input("Masukkan jumlah iterasi: "))
         for i in range(self.n):
