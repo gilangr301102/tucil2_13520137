@@ -46,7 +46,6 @@ class CurveBezierSol():
 
     def fileInputHandling(self):
         with open('../test/input.txt', 'r') as file:
-            # Read the entire file as a single string
             file_content = file.read().strip().split('\n')
         return file_content
 
@@ -101,10 +100,8 @@ class CurveBezierSol():
         self.generate_bezier_points_dnc(right_branches, curr_iteration)
 
     def get_bezier_solution(self):
-        self.bezier_generated_points[0].append(self.initial_points[0])
         self.bezier_curve_points.append(self.initial_points[0])
         self.generate_bezier_points_dnc(self.initial_points, 0)
-        self.bezier_generated_points[0].append(self.initial_points[self.n-1])
         self.bezier_curve_points.append(self.initial_points[self.n-1])
 
     def getSolution(self):
