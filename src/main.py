@@ -58,53 +58,70 @@ class CurveBezierSol():
             self.initial_points.append(Point(x,y))
 
     def get_midpoint(self, a: Point, b: Point):
+        # Get the midpoint of two points
         return Point((a.x+b.x)/2,(a.y+b.y)/2)
 
     def get_control_point(self, points: list[Point], curr_iteration, left_branches, right_branches):
         sz_points = len(points)
-        if sz_points==1:
+        if sz_points==1: # If left and right branches are empty, then it is the base case with only one point
             left_branches.append(points[0])
             right_branches.append(points[0])
             return points[0], left_branches, right_branches
-
+        
+        # Get all midpoints from current control points
         next_control_points = []
         for i in range(sz_points-1):
             midpoint = self.get_midpoint(points[i], points[i+1])
             next_control_points.append(midpoint)
 
+        # Divide the control points into left and right branches
         left_branches.append(next_control_points[0])
         right_branches.append(next_control_points[-1])
 
+        # Recursively call the function to get the next control points
         return self.get_control_point(next_control_points, curr_iteration, left_branches, right_branches)
 
     def generate_bezier_points_dnc(self, initial_points, curr_iteration):
+        # Base case if the current iteration is greater than the maximum iteration ()
         if curr_iteration > self.iteration:
             return
 
+        # Get the next control points and left and right branches
         next_control_points, left_branches, right_branches = self.get_control_point(initial_points, curr_iteration, [initial_points[0]], [initial_points[-1]])
 
+        # Reverse the right branches
         right_branches = right_branches[::-1]
 
+        # Get the size of the initial points
         sz_initial_points = len(initial_points)
 
+        # Append the initial points to the bezier generated points
         for i in range(sz_initial_points):
             self.bezier_generated_points[curr_iteration].append(initial_points[i])
 
+        # Append the next control points to the bezier generated points in the next iteration
         curr_iteration += 1
-
+        
+        # Recursively left branches to get the next control points on the left
         self.generate_bezier_points_dnc(left_branches, curr_iteration)
 
+        # Append controll next control points on the bezier curve points
         if(curr_iteration<=self.iteration):
             self.bezier_curve_points.append(next_control_points)
         
+        # Recursively right branches to get the next control points on the right
         self.generate_bezier_points_dnc(right_branches, curr_iteration)
 
     def get_bezier_solution(self):
+        # Append the initial points to the bezier curve points
         self.bezier_curve_points.append(self.initial_points[0])
+        # Generate the bezier points using divide and conquer
         self.generate_bezier_points_dnc(self.initial_points, 0)
+        # Append the last points to the bezier curve points
         self.bezier_curve_points.append(self.initial_points[self.n-1])
 
-    def getSolution(self):
+    def visualize_all(self):
+        # Visualize the bezier generated points and bezier curve points
         sz_generated_points = len(self.bezier_generated_points)
         visualize_points_x = [[] for i in range(sz_generated_points+1)]
         visualize_points_y = [[] for i in range(sz_generated_points+1)]
@@ -135,7 +152,7 @@ class CurveBezierSol():
             for j in range(len(visualize_points_x[i])):
                 line.set_data(visualize_points_x[i][:j+1], visualize_points_y[i][:j+1])
                 points.set_data(visualize_points_x[i][:j+1], visualize_points_y[i][:j+1])
-                plt.pause(0.7)
+                plt.pause(0.4)
                 plt.draw()  # Update the plot
 
         # Adding labels and title
@@ -155,7 +172,7 @@ class CurveBezierSol():
 def main():
     test = CurveBezierSol()
     test.get_bezier_solution()
-    test.getSolution()
+    test.visualize_all()
 
 if __name__ == "__main__":
     main()
