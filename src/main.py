@@ -73,13 +73,8 @@ class CurveBezierSol():
             midpoint = self.get_midpoint(points[i], points[i+1])
             next_control_points.append(midpoint)
 
-        sz_next_control_points = len(next_control_points)
-
-        for i in range(sz_next_control_points-1):
-            left_branches.append(next_control_points[i])
-
-        for i in range(sz_next_control_points-1):
-            right_branches.append(next_control_points[sz_next_control_points-1-i])
+        left_branches.append(next_control_points[0])
+        right_branches.append(next_control_points[-1])
 
         return self.get_control_point(next_control_points, curr_iteration, left_branches, right_branches)
 
