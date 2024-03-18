@@ -1,0 +1,29 @@
+Q1 = (1-t)p0 + t*p1
+Q2 = (1-t)p1 + t*p2
+Q3 = (1-t)p2 + t*p3
+
+R1 = (1-t)Q1 + t*Q2
+R2 = (1-t)Q2 + t*Q3
+
+S0 = (1-t)*R1 + t*R2
+
+S0 = (1-t)*((1-t)Q1 + t*Q2) + t*((1-t)Q2 + t*Q3)
+S0 = (1-t)*((1-t)*((1-t)p0 + t*p1) + t*((1-t)p1 + t*p2))
+    + t*((1-t)*((1-t)p1 + t*p2) + t*((1-t)p2 + t*p3))
+
+midpoint1 = get_midpoint(p0,p1)
+midpoint2 = get_midpoint(p1,p2)
+midpoint3 = get_midpoint(p2,p3)
+
+midpoint12 = get_midpoint(midpoint1,midpoint2)
+midpoint23 = get_midpoint(midpoint2,midpoint3)
+
+midpoint123 = get_midpoint(midpoint12,midpoint23)
+
+
+midpoint1 = get_midpoint(p0,p1)
+midpoint2 = get_midpoint(p1,p2)
+midpoint3 = get_midpoint(p2,p3)
+midpoint4 = get_midpoint(p3,p4)
+
+.....

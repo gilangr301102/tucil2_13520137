@@ -60,46 +60,62 @@ class CurveBezierSol():
 
     def get_midpoint(self, a: Point, b: Point):
         return Point((a.x+b.x)/2,(a.y+b.y)/2)
-    
-    def generate_bezier_points_dnc(self, p1, p2, p3, curr_iteration):
-        if(curr_iteration>self.iteration):
+
+    def get_control_point(self, points: list[Point], curr_iteration, left_branches, right_branches):
+        sz_points = len(points)
+        if sz_points==1:
+            left_branches.append(points[0])
+            right_branches.append(points[0])
+            return points[0], left_branches, right_branches
+
+        next_control_points = []
+        for i in range(sz_points-1):
+            midpoint = self.get_midpoint(points[i], points[i+1])
+            next_control_points.append(midpoint)
+
+        sz_next_control_points = len(next_control_points)
+
+        for i in range(sz_next_control_points-1):
+            left_branches.append(next_control_points[i])
+
+        for i in range(sz_next_control_points-1):
+            right_branches.append(next_control_points[sz_next_control_points-1-i])
+
+        return self.get_control_point(next_control_points, curr_iteration, left_branches, right_branches)
+
+    def generate_bezier_points_dnc(self, initial_points, curr_iteration):
+        if curr_iteration > self.iteration:
             return
 
-        midpoint1 = self.get_midpoint(p1,p2)
-        midpoint2 = self.get_midpoint(p2,p3)
-        midpoint3 = self.get_midpoint(midpoint1,midpoint2)
-        # print("debug midpoint")
-        # print(midpoint1)
-        # print(midpoint2)
-        # print(midpoint3)
-        # print("------------")
+        next_control_points, left_branches, right_branches = self.get_control_point(initial_points, curr_iteration, [initial_points[0]], [initial_points[-1]])
 
-        self.bezier_generated_points[curr_iteration].append(p2)
+        right_branches = right_branches[::-1]
+
+        sz_initial_points = len(initial_points)
+
+        for i in range(sz_initial_points):
+            self.bezier_generated_points[curr_iteration].append(initial_points[i])
 
         curr_iteration += 1
 
-        self.generate_bezier_points_dnc(p1,midpoint1,midpoint3,curr_iteration)
+        self.generate_bezier_points_dnc(left_branches, curr_iteration)
 
         if(curr_iteration<=self.iteration):
-            self.bezier_curve_points.append(midpoint3)
-
-        self.generate_bezier_points_dnc(midpoint3,midpoint2,p3,curr_iteration)
+            self.bezier_curve_points.append(next_control_points)
+        
+        self.generate_bezier_points_dnc(right_branches, curr_iteration)
 
     def get_bezier_solution(self):
-        num_initial_branch = self.n - 2
-        for i in range(num_initial_branch):
-            self.bezier_generated_points[0].append(self.initial_points[i])
-            self.bezier_curve_points.append(self.initial_points[i])
-            self.generate_bezier_points_dnc(self.initial_points[i], self.initial_points[i+1], self.initial_points[i+2], 0)
-            self.bezier_generated_points[0].append(self.initial_points[i+2])
-            self.bezier_curve_points.append(self.initial_points[i+2])
+        self.bezier_generated_points[0].append(self.initial_points[0])
+        self.bezier_curve_points.append(self.initial_points[0])
+        self.generate_bezier_points_dnc(self.initial_points, 0)
+        self.bezier_generated_points[0].append(self.initial_points[self.n-1])
+        self.bezier_curve_points.append(self.initial_points[self.n-1])
 
     def getSolution(self):
         sz_generated_points = len(self.bezier_generated_points)
         visualize_points_x = [[] for i in range(sz_generated_points+1)]
         visualize_points_y = [[] for i in range(sz_generated_points+1)]
-        print(len(self.bezier_curve_points))
-        print(self.bezier_curve_points)
 
         for i in range(sz_generated_points):
             for j in range(len(self.bezier_generated_points[i])):
@@ -127,7 +143,7 @@ class CurveBezierSol():
             for j in range(len(visualize_points_x[i])):
                 line.set_data(visualize_points_x[i][:j+1], visualize_points_y[i][:j+1])
                 points.set_data(visualize_points_x[i][:j+1], visualize_points_y[i][:j+1])
-                plt.pause(1)
+                plt.pause(0.7)
                 plt.draw()  # Update the plot
 
         # Adding labels and title
