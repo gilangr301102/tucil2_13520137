@@ -37,7 +37,7 @@ Setelah itu program berhasil dijalankan,
 ```
 n
 x1 x2 x3 ... xn
-x1 x2 x3 ... xn
+y1 y2 y3 ... yn
 n_point
 ```
 
@@ -45,6 +45,6 @@ n_point
 ```
 n
 x1 x2 x3 ... xn
-x1 x2 x3 ... xn
+y1 y2 y3 ... yn
 n_iterasi
 ```
