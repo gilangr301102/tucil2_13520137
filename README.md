@@ -20,3 +20,10 @@
 2. Jalankan perintah berikut
 ```
 python3 main.py
+```
+
+## Interaksi Command Line:
+Setelah itu program berhasil dijalankan,
+1. Input lokasi file txt persoalan ketika program meminta input, beberapa data uji txt tersedia dalam folder test (input ../test/*namafile*) melalui interaksi command line
+    jadi anda cukup memasukkan nama file tersebut saja dalam format .txt atau melalui input yang disediakan melalui command line
+2. Program akan berjalan hingga menampilkan luaran berupa solusi permasalahan dan waktu eksekusi, serta anda bisa melakukan save pada terminal untuk solusi tersebut.
