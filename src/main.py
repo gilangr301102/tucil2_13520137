@@ -227,8 +227,10 @@ class CurveBezierSol():
             for j in range(len(visualize_points_x[i])):
                 line.set_data(visualize_points_x[i][:j+1], visualize_points_y[i][:j+1])
                 points.set_data(visualize_points_x[i][:j+1], visualize_points_y[i][:j+1])
-                plt.pause(0.4)
-                plt.draw()  # Update the plot
+                if(self.is_visualize=="y"):
+                    plt.pause(0.14)
+                plt.draw()
+
         # Adding labels and title
         ax.set_xlabel('X-axis')
         ax.set_ylabel('Y-axis')
