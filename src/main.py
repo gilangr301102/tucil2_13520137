@@ -1,3 +1,4 @@
+import time
 from dataclasses import dataclass
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
@@ -221,19 +222,18 @@ class CurveBezierSol():
         ax.set_xlabel('X-axis')
         ax.set_ylabel('Y-axis')
         ax.set_title('Bezier Curve Visualization')
-        ax.legend()
-
-        # Turn off interactive mode
         plt.ioff()
 
         # Display the final plot
         plt.show()
-        # Turn on interactive mode
-        plt.ion()
 
 def main():
     test = CurveBezierSol()
+    start_time = time.time()
     test.get_bezier_solution()
+    end_time = time.time()
+    execution_time = end_time - start_time
+    print("Execution time:", execution_time, "seconds")
     test.visualize_all()
 
 if __name__ == "__main__":
