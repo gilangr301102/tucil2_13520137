@@ -20,26 +20,29 @@ class CurveBezierSol():
         self.algoritma = str(input("Pilih Algoritma [1,2]: "))
         if(self.algoritma=="1"):
             print("Menggunakan Algoritma Brute Force")
-            self.defaultInputHandlingBruteForce()
         else:
             print("Menggunakan Algoritma Divide and Conquer")
-            command = self.inputCommandHandling()
-            if(command=="2"):
-                file_content = self.fileInputHandling()
+        command = self.inputCommandHandling()
+        if(command=="2"):
+            file_content = self.fileInputHandling()
 
-                # Extract values from the input string
-                self.n = int(file_content[0])  # n is the first line
-                x_values = list(map(float, file_content[1].split()))
-                y_values = list(map(float, file_content[2].split()))
-                self.iteration = int(file_content[3])
-                for i in range(self.n):
-                    self.initial_points.append(Point(x_values[i], y_values[i]))
-                # Print the extracted values
-                print("N:", self.n)
-                print("Points:", self.initial_points)
+            # Extract values from the input string
+            self.n = int(file_content[0])  # n is the first line
+            x_values = list(map(float, file_content[1].split()))
+            y_values = list(map(float, file_content[2].split()))
+            self.iteration = int(file_content[3])
+            for i in range(self.n):
+                self.initial_points.append(Point(x_values[i], y_values[i]))
+            # Print the extracted values
+            print("N:", self.n)
+            print("Points:", self.initial_points)
+            if(self.algoritma=="2"):
                 print("Iteration:", self.iteration)
             else:
-                self.manualInputHandling()
+                print("Jumlah Point:", self.iteration)
+        else:
+            self.manualInputHandling()
+        if(self.algoritma=="2"):
             self.is_visualize = str(input("Apakah ingin melihat proses visualisasi? [y/n]: "))
         self.bezier_generated_points = [[] for i in range(self.iteration+1)]
         self.bezier_curve_points = [[] for i in range(self.iteration+1)]
@@ -63,20 +66,15 @@ class CurveBezierSol():
         with open('../test/input.txt', 'r') as file:
             file_content = file.read().strip().split('\n')
         return file_content
-    
-    def defaultInputHandlingBruteForce(self):
-        # Get the input from the user
-        self.n = 3
-        self.iteration = int(input("Masukkan jumlah iterasi: "))
-        for i in range(self.n):
-            x = float(input("Masukkan Px"+str(i)+": "))
-            y = float(input("Masukkan Py"+str(i)+": "))
-            self.initial_points.append(Point(x,y))
 
     def manualInputHandling(self):
         # Get the input from the user
-        self.n = int(input("Masukkan n: "))
-        self.iteration = int(input("Masukkan jumlah iterasi: "))
+        if self.algoritma=="1":
+            self.n = 3
+        else:
+            self.n = int(input("Masukkan n: "))
+        temp_brute_or_dnc = (self.algoritma=="1" and "Masukkan jumlah point: ") or "Masukkan jumlah iterasi: "
+        self.iteration = int(input(temp_brute_or_dnc))
         for i in range(self.n):
             x = float(input("Masukkan Px"+str(i)+": "))
             y = float(input("Masukkan Py"+str(i)+": "))
@@ -159,8 +157,7 @@ class CurveBezierSol():
 
     def get_bezier_solution(self):
         if(self.algoritma=="1"):
-            # self.bezier_curve_points[-1] = self.generate_bezier_points_brute_force(self.initial_points, self.iteration)
-            print(self.generate_bezier_points_brute_force(self.initial_points, self.iteration))
+            self.bezier_curve_points[-1] = self.generate_bezier_points_brute_force(self.initial_points, self.iteration)
         else:
             # Append the initial points to the bezier curve points
             for i in range(self.iteration+1):
