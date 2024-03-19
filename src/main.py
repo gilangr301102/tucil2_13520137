@@ -138,8 +138,9 @@ class CurveBezierSol():
         sz_initial_points = len(initial_points)
 
         # Append the initial points to the bezier generated points
-        for i in range(sz_initial_points):
-            self.bezier_generated_points[curr_iteration].append(initial_points[i])
+        if self.is_visualize == "y":
+            for i in range(sz_initial_points):
+                self.bezier_generated_points[curr_iteration].append(initial_points[i])
 
         # Append the next control points to the bezier generated points in the next iteration
         curr_iteration += 1
@@ -172,7 +173,6 @@ class CurveBezierSol():
 
     def visualize_all(self):
         # Visualize the bezier generated points and bezier curve points
-        # sz_generated_points = len(self.bezier_generated_points)
         visualize_points_x = []
         visualize_points_y = []
 
