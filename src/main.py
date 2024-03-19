@@ -90,20 +90,20 @@ class CurveBezierSol():
             return 1
         return self.binomial_coefficient(n - 1, k - 1) + self.binomial_coefficient(n - 1, k)
 
-    def generate_bezier_points_brute_force(self, ctrl_points, num_points):
+    def generate_bezier_points_brute_force(self, ctrl_points, number_of_points):
         # Generate the bezier points using brute force
         n = len(ctrl_points) - 1
-        t_values = [i / (num_points - 1) for i in range(num_points)]
-        curve_points = []
+        t_values = [i / (number_of_points - 1) for i in range(number_of_points)]
+        ret = []
 
         for t in t_values:
             point = Point(0, 0)
             for k in range(n + 1):
                 coefficient = self.binomial_coefficient(n, k) * (1 - t) ** (n - k) * t ** k
                 point = Point(point.x + coefficient * ctrl_points[k].x, point.y + coefficient * ctrl_points[k].y)
-            curve_points.append(point)
+            ret.append(point)
 
-        return curve_points
+        return ret
 
     def get_control_point(self, points: list[Point], curr_iteration, left_branches, right_branches):
         sz_points = len(points)
