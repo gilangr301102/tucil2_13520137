@@ -27,3 +27,6 @@ midpoint3 = get_midpoint(p2,p3)
 midpoint4 = get_midpoint(p3,p4)
 
 .....
+
+Iteration: 3
+[Point(x=0.0, y=0.0), Point(x=3.375, y=3.125), Point(x=8.0, y=0.0)]

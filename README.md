@@ -27,3 +27,24 @@ Setelah itu program berhasil dijalankan,
 1. Input lokasi file txt persoalan ketika program meminta input, beberapa data uji file txt tersedia file input.txt pada folder test (input ../test/input.txt) melalui interaksi command line
     jadi anda cukup memasukkan nama file tersebut saja dalam format .txt atau melalui input yang disediakan melalui command line
 2. Program akan berjalan hingga menampilkan luaran berupa solusi permasalahan dan waktu eksekusi, serta anda bisa melakukan save pada terminal untuk solusi tersebut.
+
+## Notes:
+1. Untuk inputan brute force menggunakan parameter number of point pada kurva bezier yang diinginkan.
+2. Untuk inputan divide and conquer menggunakan parameter number of iterasi, sehingga semakin banyak iterasi maka kurva akan semakin mulus dan semakin banyak number of pointnya (tetapi tidak bisa diatur lewat input secara langsung number of pointnya).
+
+## Format Masukkan File txt
+1. Brute Force:
+```
+n
+x1 x2 x3 ... xn
+x1 x2 x3 ... xn
+n_point
+```
+
+2. Divide and Conquer
+```
+n
+x1 x2 x3 ... xn
+x1 x2 x3 ... xn
+n_iterasi
+```
