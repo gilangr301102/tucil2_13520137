@@ -13,7 +13,9 @@
 4. **bin** -> lokasi penyimpanan executable
 
 ## Requirement Program :
-- Compiler Python3
+- Python3
+- matplotlib
+- numpy
 
 ## Cara menjalankan program
 1. Buka terminal, arahkan ke direktori tempat program disimpan yaitu pada folder src
