@@ -30,7 +30,7 @@ class CurveBezierSol():
         else:
             self.manualInputHandling()
         self.bezier_generated_points = [[] for i in range(self.iteration+1)]
-        self.bezier_curve_points = []
+        self.bezier_curve_points = [[] for i in range(self.iteration+1)]
 
     def inputCommandHandling(self):
         # Get the input command from the user
@@ -68,10 +68,8 @@ class CurveBezierSol():
     def get_control_point(self, points: list[Point], curr_iteration, left_branches, right_branches):
         sz_points = len(points)
         if sz_points==1: # If left and right branches are empty, then it is the base case with only one point
-            left_branches.append(points[0])
-            right_branches.append(points[0])
             return points[0], left_branches, right_branches
-        
+
         # Get all midpoints from current control points
         next_control_points = []
         for i in range(sz_points-1):
@@ -91,7 +89,7 @@ class CurveBezierSol():
             return
 
         # Get the next control points and left and right branches
-        next_control_points, left_branches, right_branches = self.get_control_point(initial_points, curr_iteration, [initial_points[0]], [initial_points[-1]])
+        next_control_point, left_branches, right_branches = self.get_control_point(initial_points, curr_iteration, [initial_points[0]], [initial_points[-1]])
 
         # Reverse the right branches
         right_branches = right_branches[::-1]
@@ -111,43 +109,55 @@ class CurveBezierSol():
 
         # Append controll next control points on the bezier curve points
         if(curr_iteration<=self.iteration):
-            self.bezier_curve_points.append(next_control_points)
+            for i in range(curr_iteration, self.iteration+1):
+                self.bezier_curve_points[i].append(next_control_point)
         
         # Recursively right branches to get the next control points on the right
         self.generate_bezier_points_dnc(right_branches, curr_iteration)
 
     def get_bezier_solution(self):
         # Append the initial points to the bezier curve points
-        self.bezier_curve_points.append(self.initial_points[0])
+        for i in range(self.iteration+1):
+            self.bezier_curve_points[i].append(self.initial_points[0])
+
         # Generate the bezier points using divide and conquer
         self.generate_bezier_points_dnc(self.initial_points, 0)
+
         # Append the last points to the bezier curve points
-        self.bezier_curve_points.append(self.initial_points[self.n-1])
+        for i in range(self.iteration+1):
+            self.bezier_curve_points[i].append(self.initial_points[-1])
 
     def visualize_all(self):
         # Visualize the bezier generated points and bezier curve points
-        sz_generated_points = len(self.bezier_generated_points)
-        visualize_points_x = [[] for i in range(sz_generated_points+1)]
-        visualize_points_y = [[] for i in range(sz_generated_points+1)]
+        # sz_generated_points = len(self.bezier_generated_points)
+        visualize_points_x = []
+        visualize_points_y = []
 
-        for i in range(sz_generated_points):
+        for i in range(self.iteration+1):
+            temp_x = []
+            temp_y = []
             for j in range(len(self.bezier_generated_points[i])):
-                visualize_points_x[i].append(self.bezier_generated_points[i][j].x)
-                visualize_points_y[i].append(self.bezier_generated_points[i][j].y)
-
-        for i in range(len(self.bezier_curve_points)):
-            visualize_points_x[sz_generated_points].append(self.bezier_curve_points[i].x)
-            visualize_points_y[sz_generated_points].append(self.bezier_curve_points[i].y)
+                temp_x.append(self.bezier_generated_points[i][j].x)
+                temp_y.append(self.bezier_generated_points[i][j].y)
+            visualize_points_x.append(temp_x)
+            visualize_points_y.append(temp_y)
+            temp_x = []
+            temp_y = []
+            for j in range(len(self.bezier_curve_points[i])):
+                temp_x.append(self.bezier_curve_points[i][j].x)
+                temp_y.append(self.bezier_curve_points[i][j].y)
+            visualize_points_x.append(temp_x)
+            visualize_points_y.append(temp_y)
 
         # Initialize the plot
         fig, ax = plt.subplots()
-
-        for i in range(sz_generated_points+1):
+        length_visualize_points = len(visualize_points_x)
+        for i in range(length_visualize_points):
             line, = ax.plot(visualize_points_x[i], visualize_points_y[i])
             points, = ax.plot(visualize_points_x[i], visualize_points_y[i], 'o')
 
             # Randomize line and point colors
-            line_color = (i==sz_generated_points and "red" or "black")
+            line_color = (i%2==1 and "#{:06x}".format(random.randint(0, 0xFFFFFF), label="Point") or "black")
             point_color = "#{:06x}".format(random.randint(0, 0xFFFFFF), label="Point")
 
             # Set line and point colors
@@ -162,7 +172,7 @@ class CurveBezierSol():
         # Adding labels and title
         ax.set_xlabel('X-axis')
         ax.set_ylabel('Y-axis')
-        ax.set_title('Line and Points Visualization')
+        ax.set_title('Bezier Curve Visualization')
         ax.legend()
 
         # Turn off interactive mode
